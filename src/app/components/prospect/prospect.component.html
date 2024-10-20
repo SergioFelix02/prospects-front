@@ -17,7 +17,7 @@
                 <!-- First Name -->
                 <div class="col-md-6">
                   <label class="form-label">Nombre *</label>
-                  <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="prospect.name" name="name" required [disabled]="isEdit">
+                  <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="prospect.name" name="name" required [disabled]="isEdit" maxlength="50">
                   <div *ngIf="prospectForm.submitted && !prospect.name" class="text-danger">
                     El nombre es obligatorio.
                   </div>
@@ -26,7 +26,7 @@
                 <!-- Last name -->
                 <div class="col-md-6">
                   <label class="form-label">Primer Apellido *</label>
-                  <input type="text" class="form-control" placeholder="Primer Apellido" [(ngModel)]="prospect.lastName" name="lastName" required [disabled]="isEdit">
+                  <input type="text" class="form-control" placeholder="Primer Apellido" [(ngModel)]="prospect.lastName" name="lastName" required [disabled]="isEdit" maxlength="50">
                   <div *ngIf="prospectForm.submitted && !prospect.lastName" class="text-danger">
                     El primer apellido es obligatorio.
                   </div>
@@ -35,13 +35,13 @@
                 <!-- Second Last name -->
                 <div class="col-md-6">
                   <label class="form-label">Segundo Apellido</label>
-                  <input type="text" class="form-control" placeholder="Segundo Apellido" [(ngModel)]="prospect.secondLastName" name="secondLastName" [disabled]="isEdit">
+                  <input type="text" class="form-control" placeholder="Segundo Apellido" [(ngModel)]="prospect.secondLastName" name="secondLastName" [disabled]="isEdit" maxlength="50">
                 </div>
 
                 <!-- Phone number -->
                 <div class="col-md-6">
-                  <label class="form-label">Numero de Teléfono *</label>
-                  <input type="text" class="form-control" placeholder="Numero de Teléfono" [(ngModel)]="prospect.phoneNumber" name="phoneNumber" required [disabled]="isEdit">
+                  <label class="form-label">Número de Teléfono *</label>
+                  <input type="text" class="form-control" placeholder="Número de Teléfono" [(ngModel)]="prospect.phoneNumber" name="phoneNumber" required [disabled]="isEdit" number maxlength="10" minlength="10">
                   <div *ngIf="prospectForm.submitted && !prospect.phoneNumber" class="text-danger">
                     El número de teléfono es obligatorio.
                   </div>
