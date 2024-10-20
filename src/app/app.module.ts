@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ProspectService } from './prospect.service';
-import { ProspectComponent } from './prospect/prospect.component';
-import { ProspectListComponent } from './prospect-list/prospect-list.component';
+import { ProspectService } from './services/prospect.service';
+import { ProspectComponent } from './components/prospect/prospect.component';
+import { ProspectListComponent } from './components/prospect-list/prospect-list.component';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 

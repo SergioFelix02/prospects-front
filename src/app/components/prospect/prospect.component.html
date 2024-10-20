@@ -9,7 +9,7 @@
 
       <form class="file-upload" #prospectForm="ngForm" (ngSubmit)="saveProspect(prospectForm)">
         <div class="row mb-5 gx-5">
-          <div class="col-xxl-8 mb-5 mb-xxl-0">
+          <div class="col-xxl-7 mb-5 mb-xxl-0">
             <div class="bg-secondary-soft px-4 py-5 rounded">
               <div class="row g-3">
                 <h5 class="mb-4 mt-0">Datos del Prospecto</h5>
@@ -50,13 +50,13 @@
             </div>
           </div>
 
-          <!-- Upload profile -->
-          <div class="col-xxl-4">
+          <!-- Upload files -->
+          <div class="col-xxl-5">
             <div class="bg-secondary-soft px-4 py-5 rounded">
               <div class="d-flex justify-content-between align-items-center">
                 <h4>Documentos</h4>
                 <input type="file" id="customFile" name="file" hidden="" accept="image/*, application/pdf" (change)="onFileChange($event)">
-                <label class="btn btn-success-soft btn-block" for="customFile">
+                <label *ngIf="!isEdit" class="btn btn-success-soft btn-block" for="customFile">
                   <i class="fas fa-plus"></i>
                   Cargar
                 </label>
@@ -73,17 +73,20 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let file of files">
-                          <td>{{ file.file.name }}</td>
+                        <tr *ngFor="let file of files; let i = index">
+                          <td>{{ file.file ? file.file.name : file.name }}</td>
                           <td>
-                            <button type="button" class="btn btn-primary btn-sm" (click)="previewFile(file.file)">
+                            <button type="button" class="btn btn-primary btn-sm" (click)="previewFile(file)">
                               <i class="fas fa-eye"></i>
+                            </button>
+                            &nbsp;
+                            <button *ngIf="!isEdit" type="button" class="btn btn-danger btn-sm" (click)="removeFile(i)">
+                              <i class="fas fa-trash-alt"></i>
                             </button>
                           </td>
                         </tr>
                       </tbody>
                     </table>
-
                   </div>
                 </div>
               </div>
@@ -91,11 +94,39 @@
             </div>
           </div>
 
+          <!-- ProspectLogs -->
+          <div *ngIf="prospectLogs.length > 0"class="row mb-5 gx-5">
+            <div class="col-12">
+              <div class="bg-secondary-soft px-4 py-5 rounded">
+                <h5 class="mb-4 mt-0">Observaciones</h5>
+                <div class="table-responsive">
+                  <table class="table project-list-table table-nowrap align-middle table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nota</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let prospectLog of prospectLogs">
+                        <td>{{ prospectLog.note }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="gap-3 d-md-flex justify-content-md-center text-center">
-          <button type="button" class="btn btn-secondary" (click)="goBack()">Salir</button>
-          <button type="submit" class="btn btn-primary" [disabled]="isEdit || !prospectForm.valid">Enviar</button>
+          <button type="button" class="btn btn-secondary" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i>
+            Salir
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isEdit || !prospectForm.valid">
+            Enviar
+            <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
       </form>
     </div>

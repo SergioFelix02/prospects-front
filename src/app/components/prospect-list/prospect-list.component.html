@@ -7,7 +7,7 @@
         <a class="nav-link" [ngClass]="{'active': activeTab === 1}" (click)="setActiveTab(1)" role="tab">Listado</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" [ngClass]="{'active': activeTab === 2}" (click)="setActiveTab(2)" role="tab">Evaluar</a>
+        <a class="nav-link" [ngClass]="{'active': activeTab === 2}" (click)="setActiveTab(2)" role="tab">Evaluación</a>
       </li>
     </ul>
 
@@ -63,9 +63,9 @@
                                 <td>
                                   <ul class="list-inline mb-0">
                                       <li class="list-inline-item">
-                                          <a (click)="editProspect(prospect?.idProspect)" data-bs-toggle="tooltip" data-bs-placement="top" title="view" class="btn btn-sm btn-soft-primary">
+                                          <button (click)="editProspect(prospect?.idProspect)" data-bs-toggle="tooltip" data-bs-placement="top" title="view" class="btn btn-sm btn-primary">
                                               <i class="fas fa-eye font-size-18"></i>
-                                          </a>
+                                          </button>
                                       </li>
                                   </ul>
                                 </td>
@@ -109,7 +109,7 @@
         <div class="row align-items-center">
           <div class="col-md-6">
               <div class="mb-3">
-                  <h4 class="card-title">Evaluar Prospectos <span class="text-muted fw-normal ms-2"></span></h4>
+                  <h4 class="card-title">Evaluación de Prospectos <span class="text-muted fw-normal ms-2"></span></h4>
               </div>
           </div>
         </div>
@@ -124,6 +124,7 @@
                               <th scope="col">Nombre</th>
                               <th scope="col">Primer Apellido</th>
                               <th scope="col">Segundo Apellido</th>
+                              <th scope="col">Numero de Teléfono</th>
                               <th scope="col">Estatus</th>
                               <th scope="col" style="width: 200px;">Acciones</th>
                           </tr>
@@ -133,6 +134,7 @@
                             <td>{{prospect?.name}}</td>
                             <td>{{prospect?.lastName}}</td>
                             <td>{{prospect?.secondLastName}}</td>
+                            <td>{{prospect?.phoneNumber}}</td>
                             <td>
                               <span
                                   class="badge"
@@ -147,15 +149,17 @@
                             <td>
                               <ul class="list-inline mb-0">
                                 <li class="list-inline-item">
-                                  <a (click)="changeStatus(prospect, 1)" data-bs-toggle="tooltip" data-bs-placement="top" title="Autorizar" class="btn btn-sm btn-soft-primary">
+                                  <button (click)="authorizeProspect(prospect)" data-bs-toggle="tooltip" data-bs-placement="top" title="Autorizar" class="btn btn-sm btn-success" [class.disabled]="prospect?.status != 3">
                                     <i class="fas fa-check"></i>
-                                  </a>
-                                  <a (click)="changeStatus(prospect, 2)" data-bs-toggle="tooltip" data-bs-placement="top" title="Rechazar" class="btn btn-sm btn-soft-primary">
+                                  </button>
+                                  &nbsp;
+                                  <button (click)="openRejectModal(prospect)" data-bs-toggle="tooltip" data-bs-placement="top" title="Rechazar" class="btn btn-sm btn-danger" [class.disabled]="prospect?.status != 3">
                                     <i class="fas fa-ban"></i>
-                                  </a>
-                                  <a (click)="editProspect(prospect?.idProspect)" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle" class="btn btn-sm btn-soft-primary">
+                                  </button>
+                                  &nbsp;
+                                  <button (click)="editProspect(prospect?.idProspect)" data-bs-toggle="tooltip" data-bs-placement="top" title="Detalle" class="btn btn-sm btn-primary">
                                     <i class="fas fa-eye"></i>
-                                  </a>
+                                  </button>
                                 </li>
                               </ul>
                             </td>
@@ -197,6 +201,32 @@
   </div>
 </div>
 
+<!-- Modal para comentarios de rechazo -->
+<div class="modal fade" id="rejectNoteModal" tabindex="-1" aria-labelledby="rejectNoteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectNoteModalLabel">Rechazar Prospecto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #rejectForm="ngForm">
+          <div class="mb-3">
+            <label for="rejectNote" class="form-label">Comentario</label>
+            <textarea class="form-control" id="rejectNote" [(ngModel)]="rejectNote" name="rejectNote" rows="3" required style="resize: none"></textarea>
+          </div>
+          <div *ngIf="commentError" class="text-danger">
+            El comentario es obligatorio.
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="confirmRejection()">Rechazar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- jQuery & Bootstrap -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

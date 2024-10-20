@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProspectComponent } from './prospect/prospect.component';
-import { ProspectListComponent } from './prospect-list/prospect-list.component';
+import { ProspectComponent } from './components/prospect/prospect.component';
+import { ProspectListComponent } from './components/prospect-list/prospect-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'prospects/index', pathMatch: 'full' },
