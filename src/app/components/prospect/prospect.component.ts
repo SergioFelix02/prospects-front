@@ -7,7 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 declare var bootstrap: any;
-import * as swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-prospect',
@@ -24,7 +24,6 @@ export class ProspectComponent implements OnInit {
   public uploadedFiles: File[] = [];
   public imageUrl: SafeUrl = "";
   public fileType: string = "";
-  public swal: any;
 
   @ViewChild('previewModal') previewModal!: ElementRef;
 
@@ -41,7 +40,6 @@ export class ProspectComponent implements OnInit {
       phoneNumber: '',
       status: 3
     };
-    this.swal = swal;
   }
 
   ngOnInit(): void {
@@ -59,7 +57,7 @@ export class ProspectComponent implements OnInit {
           this.getProspectLogs(id);
         },
         (error: HttpErrorResponse) => {
-          this.swal({
+          Swal.fire({
             title: "Error",
             text: error.message,
             icon: "error",
@@ -75,7 +73,7 @@ export class ProspectComponent implements OnInit {
       const selectedFiles = Array.from(event.target.files) as File[];
       selectedFiles.forEach(async (file) => {
         if (file.size > 4 * 1024 * 1024) {
-          this.swal({
+          Swal.fire({
             title: "Error",
             text: "El archivo es demasiado grande. Debe ser menor de 4MB.",
             icon: "error",
@@ -92,14 +90,15 @@ export class ProspectComponent implements OnInit {
   }
 
   public removeFile(index: number): void {
-    this.swal({
+    Swal.fire({
       title: "Eliminar archivo",
       text: "¿Estás seguro de que deseas eliminar el archivo?",
       icon: "warning",
-      buttons: ["Cancelar", "Eliminar"],
-      dangerMode: true,
-    }).then((confirm: boolean) => {
-      if (confirm) {
+      showCancelButton: true,
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.files.splice(index, 1);
         this.uploadedFiles.splice(index, 1);
       }
@@ -108,15 +107,17 @@ export class ProspectComponent implements OnInit {
 
   public saveProspect(form: NgForm): void {
     if (form.valid) {
-      this.swal({
+      Swal.fire({
         title: "Guardar prospecto",
         text: "¿Estás seguro de que deseas guardar el prospecto?",
         icon: "warning",
-        buttons: ["Cancelar", "Guardar"],
-      }).then((confirm: boolean) => {
-        if (confirm) {
+        showCancelButton: true,
+        confirmButtonText: "Guardar",
+        cancelButtonText: "Cancelar"
+      }).then((result) => {
+        if (result.isConfirmed) {
           if (this.uploadedFiles.length == 0) {
-            this.swal({
+            Swal.fire({
               title: "Error",
               text: "Debe cargar al menos un archivo",
               icon: "error",
@@ -126,14 +127,14 @@ export class ProspectComponent implements OnInit {
           this.prospectService.saveProspect(this.prospect, this.uploadedFiles).subscribe(
             (response: any) => {
               this.router.navigate(['/prospects/index']);
-              this.swal({
+              Swal.fire({
                 title: "Éxito",
                 text: response.message,
                 icon: "success",
               });
             },
             (error: HttpErrorResponse) => {
-              this.swal({
+              Swal.fire({
                 title: "Error",
                 text: error.message,
                 icon: "error",
@@ -156,7 +157,7 @@ export class ProspectComponent implements OnInit {
             this.imageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(previewUrl);
           } else {
             this.imageUrl = "";
-            this.swal({
+            Swal.fire({
               title: "Vista previa no disponible",
               text: "Solo se pueden previsualizar imágenes y PDFs.",
               icon: "warning",
@@ -168,7 +169,7 @@ export class ProspectComponent implements OnInit {
           modal.show();
         },
         (error: HttpErrorResponse) => {
-          this.swal({
+          Swal.fire({
             title: "Error",
             text: "No se pudo cargar la vista previa del archivo.",
             icon: "error",
@@ -183,7 +184,7 @@ export class ProspectComponent implements OnInit {
         this.imageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(previewUrl);
       } else {
         this.imageUrl = "";
-        this.swal({
+        Swal.fire({
           title: "Vista previa no disponible",
           text: "Solo se pueden previsualizar imágenes y PDFs.",
           icon: "warning",
@@ -200,10 +201,9 @@ export class ProspectComponent implements OnInit {
     this.prospectService.getProspectLogs(prospectId).subscribe(
       (prospectLogs: any) => {
         this.prospectLogs = prospectLogs.data;
-        console.log(this.prospectLogs);
       },
       (error: HttpErrorResponse) => {
-        this.swal({
+        Swal.fire({
           title: "Error",
           text: error.message,
           icon: "error",
@@ -216,13 +216,15 @@ export class ProspectComponent implements OnInit {
     if (this.isEdit) {
       this.router.navigate(['/prospects/index']);
     } else {
-      this.swal({
+      Swal.fire({
         title: "Volver",
         text: "¿Estás seguro de que deseas volver?, se perderá toda la información capturada",
         icon: "warning",
-        buttons: ["Cancelar", "Volver"],
-      }).then((confirm: boolean) => {
-        if (confirm) {
+        showCancelButton: true,
+        confirmButtonText: "Volver",
+        cancelButtonText: "Cancelar"
+      }).then((result) => {
+        if (result.isConfirmed) {
           this.router.navigate(['/prospects/index']);
         }
       });

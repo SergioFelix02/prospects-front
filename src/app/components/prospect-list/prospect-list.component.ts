@@ -1,12 +1,11 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProspectService } from '../../services/prospect.service';
 import { Prospect } from '../../models/prospect';
 import { ProspectLog } from '../../models/prospectLog';
 declare var bootstrap: any;
-import * as swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-prospect-list',
@@ -26,7 +25,6 @@ export class ProspectListComponent implements OnInit {
   public rejectNote: string = '';
   public commentError: boolean = false;
   private prospectToReject: any = [];
-  public swal: any;
 
   public statuses: { [key: number]: string } = {
     1: 'Autorizado',
@@ -38,9 +36,7 @@ export class ProspectListComponent implements OnInit {
     private prospectService: ProspectService,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.swal = swal
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activeTab = this.route.snapshot.paramMap.get('activeTab') ? 2 : 1;
@@ -57,7 +53,7 @@ export class ProspectListComponent implements OnInit {
         this.pages = Array.from({length: this.totalPages}, (_, i) => i + 1);
       },
       (error: HttpErrorResponse) => {
-        this.swal({
+        Swal.fire({
           title: "Error",
           text: error.message,
           icon: "error",
@@ -67,25 +63,27 @@ export class ProspectListComponent implements OnInit {
   }
 
   public authorizeProspect(prospect: Prospect): void {
-    this.swal({
+    Swal.fire({
       title: "Autorizar Prospecto",
       text: "¿Estás seguro de que deseas autorizar el prospecto?",
       icon: "warning",
-      buttons: ["Cancelar", "Autorizar"],
-    }).then((confirm: boolean) => {
-      if (confirm) {
+      showCancelButton: true,
+      confirmButtonText: "Autorizar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
         prospect.status = 1;
         this.prospectService.updateProspect(prospect).subscribe(
           (response: any) => {
             this.getProspects(this.page - 1);
-            this.swal({
+            Swal.fire({
               title: "Éxito",
-              text: response.message,
+              text: "Prospecto autorizado con éxito",
               icon: "success",
             });
           },
           (error: HttpErrorResponse) => {
-            this.swal({
+            Swal.fire({
               title: "Error",
               text: error.message,
               icon: "error",
@@ -111,14 +109,15 @@ export class ProspectListComponent implements OnInit {
       this.commentError = true;
       return;
     }
-    this.swal({
+    Swal.fire({
       title: "Rechazar Prospecto",
       text: "¿Estás seguro de que deseas rechazar el prospecto?",
       icon: "warning",
-      buttons: ["Cancelar", "Rechazar"],
-      dangerMode: true,
-    }).then((confirm: boolean) => {
-      if (confirm) {
+      showCancelButton: true,
+      confirmButtonText: "Rechazar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.prospectToReject.status = 2;
         this.prospectService.updateProspect(this.prospectToReject).subscribe(
           (response: any) => {
@@ -130,9 +129,9 @@ export class ProspectListComponent implements OnInit {
             this.prospectService.saveProspectLog(prospectLog).subscribe(
               (response: any) => {
                 this.getProspects(this.page - 1);
-                this.swal({
+                Swal.fire({
                   title: "Éxito",
-                  text: response.message,
+                  text: "Prospecto rechazado con éxito",
                   icon: "success",
                 });
                 const modalElement = document.getElementById('rejectNoteModal');
@@ -140,7 +139,7 @@ export class ProspectListComponent implements OnInit {
                 modal.hide();
               },
               (error: HttpErrorResponse) => {
-                this.swal({
+                Swal.fire({
                   title: "Error",
                   text: error.message,
                   icon: "error",
@@ -149,7 +148,7 @@ export class ProspectListComponent implements OnInit {
             );
           },
           (error: HttpErrorResponse) => {
-            this.swal({
+            Swal.fire({
               title: "Error",
               text: error.message,
               icon: "error",
