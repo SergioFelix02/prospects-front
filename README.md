@@ -1,10 +1,6 @@
 # Sistema de Prospectos
 
-Sistema Web con un sistema de préstamos y amortizaciones realizado como examen técnico para la empresa Coppel
-
-<h3>Hecho Por</h3>
-Sergio Felix<br>
-<h3>Desarrollado en AngularJS</h3>
+Sistema Web para registrar, autorizar y rechazar prospectos realizado como examen técnico para la empresa Coppel desarrollado en AngularJS
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.11.
 
